@@ -1,66 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Consumo de Energia</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #f0fdf4;
-      color: #064e3b;
-    }
-    header {
-      background: #16a34a;
-      color: white;
-      padding: 1.2rem;
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      background: #dcfce7;
-      padding: 0.5rem;
-    }
-    nav button {
-      border: none;
-      background: #22c55e;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    section { display: none; padding: 1rem; }
-    section.active { display: block; }
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-    input, select {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.3rem;
-      border-radius: 8px;
-      border: 1px solid #bbf7d0;
-    }
-    footer {
-      text-align: center;
-      font-size: 0.8rem;
-      padding: 0.8rem;
-      background: #dcfce7;
-      color: #065f46;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consumo de Energia</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f0fdf4;
+  color: #064e3b;
+}
+header {
+  background: #16a34a;
+  color: white;
+  padding: 1.2rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  background: #dcfce7;
+  padding: 0.5rem;
+}
+nav button {
+  border: none;
+  background: #22c55e;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+section { display: none; padding: 1rem; }
+section.active { display: block; }
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+input, select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+}
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 0.8rem;
+  background: #dcfce7;
+}
+</style>
 </head>
+
 <body>
 
 <header>Consumo de Energia</header>
@@ -82,8 +84,8 @@
 <section id="dispositivos">
   <div class="card">
     <h3>Cadastrar Dispositivo</h3>
-    <input id="nome" placeholder="Nome do dispositivo" />
-    <input id="watts" type="number" placeholder="Potência (W)" />
+    <input id="nome" placeholder="Nome do dispositivo">
+    <input id="watts" type="number" placeholder="Potência (W)">
     <button onclick="addDevice()">Adicionar</button>
   </div>
   <div id="listaDispositivos"></div>
@@ -93,7 +95,7 @@
   <div class="card">
     <h3>Registrar Uso Diário</h3>
     <select id="deviceSelect"></select>
-    <input id="horas" type="number" placeholder="Horas usadas hoje" />
+    <input id="horas" type="number" placeholder="Horas usadas hoje">
     <button onclick="addUso()">Registrar</button>
   </div>
 </section>
@@ -105,7 +107,7 @@
 <section id="config">
   <div class="card">
     <h3>Preço do kWh (R$)</h3>
-    <input id="preco" type="number" step="0.01" />
+    <input id="preco" type="number" step="0.01">
     <button onclick="savePrice()">Salvar</button>
   </div>
 </section>
@@ -113,134 +115,98 @@
 <footer>Trabalho de Ciências – 9°A</footer>
 
 <script>
-  let devices = JSON.parse(localStorage.getItem('devices') || '[]');
-  let usos = JSON.parse(localStorage.getItem('usos') || '[]');
-  let preco = Number(localStorage.getItem('preco') || 0);
+let devices = JSON.parse(localStorage.getItem('devices') || '[]');
+let usos = JSON.parse(localStorage.getItem('usos') || '[]');
+let preco = Number(localStorage.getItem('preco') || 0);
 
-  document.getElementById('preco').value = preco;
+document.getElementById('preco').value = preco;
 
-  function showTab(id) {
-    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    if(id === 'dashboard') renderChart();
-    if(id === 'ranking') renderRanking();
-  }
+function showTab(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id === 'dashboard') renderChart();
+  if(id === 'ranking') renderRanking();
+}
 
-  function savePrice() {
-    preco = Number(document.getElementById('preco').value);
-    localStorage.setItem('preco', preco);
-    alert('Preço salvo!');
-    renderChart();
-  }
+function savePrice() {
+  preco = Number(document.getElementById('preco').value);
+  localStorage.setItem('preco', preco);
+  renderChart();
+  renderRanking();
+}
 
-  function addDevice() {
-    devices.push({ name: nome.value, watts: Number(watts.value) });
-    localStorage.setItem('devices', JSON.stringify(devices));
-    nome.value = watts.value = '';
-    loadDevices();
-  }
+function addDevice() {
+  devices.push({ name: nome.value, watts: Number(watts.value) });
+  localStorage.setItem('devices', JSON.stringify(devices));
+  nome.value = watts.value = '';
+  loadDevices();
+}
 
-  function deleteDevice(index) {
-    const nomeDisp = devices[index].name;
-    devices.splice(index, 1);
-    usos = usos.filter(u => u.device !== nomeDisp);
-    localStorage.setItem('devices', JSON.stringify(devices));
-    localStorage.setItem('usos', JSON.stringify(usos));
-    loadDevices();
-    renderChart();
-    renderRanking();
-  }
-
-  function loadDevices() {
-    const list = document.getElementById('listaDispositivos');
-    const select = document.getElementById('deviceSelect');
-    list.innerHTML = select.innerHTML = '';
-    devices.forEach((d, i) => {
-      list.innerHTML += `
-        <div class='card'>
-          <strong>${d.name}</strong> - ${d.watts}W<br>
-          <button onclick="deleteDevice(${i})">Apagar</button>
-        </div>`;
-      select.innerHTML += `<option value='${i}'>${d.name}</option>`;
-    });
-  } - ${d.watts}W</div>`;
-      select.innerHTML += `<option value='${i}'>${d.name}</option>`;
-    });
-  }
-
-  function addUso() {
-    const d = devices[deviceSelect.value];
-    const horas = Number(document.getElementById('horas').value);
-    const kwh = (d.watts * horas) / 1000;
-    usos.push({ device: d.name, kwh });
-    localStorage.setItem('usos', JSON.stringify(usos));
-    horas.value = '';
-    renderChart();
-    renderRanking();
-  }
-
-  function deleteUso(index) {
-    usos.splice(index, 1);
-    localStorage.setItem('usos', JSON.stringify(usos));
-    renderChart();
-    renderRanking();
-  }
-
-  function renderChart() {
-    const ctx = document.getElementById('grafico');
-    const labels = usos.map((u, i) => `${u.device} (${i+1})`);
-    const dataKwh = usos.map(u => u.kwh);
-    const dataR = usos.map(u => u.kwh * preco);
-
-    if(window.chart) window.chart.destroy();
-    window.chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [
-          { label: 'kWh', data: dataKwh, backgroundColor: '#16a34a' },
-          { label: 'R$', data: dataR, backgroundColor: '#86efac' }
-        ]
-      }
-    });
-  }
-
-  function renderUsoLista() {
-    const usoDiv = document.getElementById('usoLista');
-    if(!usoDiv) return;
-    usoDiv.innerHTML = '';
-    usos.forEach((u, i) => {
-      usoDiv.innerHTML += `
-        <div class='card'>
-          ${u.device}: ${u.kwh.toFixed(2)} kWh — R$ ${(u.kwh*preco).toFixed(2)}<br>
-          <button onclick="deleteUso(${i})">Apagar registro</button>
-        </div>`;
-    });
-  }        ]
-      }
-    });
-  }
-
-  function renderRanking() {
-    const map = {};
-    usos.forEach(u => map[u.device] = (map[u.device] || 0) + u.kwh);
-    const el = document.getElementById('rankingList');
-    el.innerHTML = '<h3>Vilões da Casa</h3>';
-    Object.entries(map)
-      .sort((a,b)=>b[1]-a[1])
-      .forEach(([name, kwh])=>{
-        el.innerHTML += `<p>${name}: ${kwh.toFixed(2)} kWh — R$ ${(kwh*preco).toFixed(2)}</p>`;
-      });
-  }
-
+function deleteDevice(index) {
+  const name = devices[index].name;
+  devices.splice(index, 1);
+  usos = usos.filter(u => u.device !== name);
+  localStorage.setItem('devices', JSON.stringify(devices));
+  localStorage.setItem('usos', JSON.stringify(usos));
   loadDevices();
   renderChart();
+  renderRanking();
+}
+
+function loadDevices() {
+  const list = document.getElementById('listaDispositivos');
+  const select = document.getElementById('deviceSelect');
+  list.innerHTML = select.innerHTML = '';
+  devices.forEach((d, i) => {
+    list.innerHTML += `
+      <div class="card">
+        <strong>${d.name}</strong> - ${d.watts}W
+        <button onclick="deleteDevice(${i})">Apagar</button>
+      </div>`;
+    select.innerHTML += `<option value="${i}">${d.name}</option>`;
+  });
+}
+
+function addUso() {
+  const d = devices[deviceSelect.value];
+  const horas = Number(document.getElementById('horas').value);
+  const kwh = (d.watts * horas) / 1000;
+  usos.push({ device: d.name, kwh });
+  localStorage.setItem('usos', JSON.stringify(usos));
+  renderChart();
+  renderRanking();
+}
+
+function renderChart() {
+  const ctx = document.getElementById('grafico');
+  if(window.chart) window.chart.destroy();
+  window.chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: usos.map(u => u.device),
+      datasets: [
+        { label: 'kWh', data: usos.map(u => u.kwh), backgroundColor: '#16a34a' },
+        { label: 'R$', data: usos.map(u => u.kwh * preco), backgroundColor: '#86efac' }
+      ]
+    }
+  });
+}
+
+function renderRanking() {
+  const map = {};
+  usos.forEach(u => map[u.device] = (map[u.device] || 0) + u.kwh);
+  const el = document.getElementById('rankingList');
+  el.innerHTML = '<h3>Vilões da Casa</h3>';
+  Object.entries(map)
+    .sort((a,b)=>b[1]-a[1])
+    .forEach(([n,k])=>{
+      el.innerHTML += `<p>${n}: ${k.toFixed(2)} kWh — R$ ${(k*preco).toFixed(2)}</p>`;
+    });
+}
+
+loadDevices();
+renderChart();
 </script>
+
 </body>
 </html>
-
-<script src="script.js"></script>
-
-<input id="precoKwh">
-<ul id="listaAparelhos"></ul>
-<ul id="listaRegistros"></ul>
